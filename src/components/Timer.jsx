@@ -26,8 +26,16 @@ export default class Timer extends Component {
     const { elapsed } = this.state;
     return (
       <div>
-        <h2>Time: {elapsed} seconds</h2>
+        <h2>
+          Time: {parseNumber(elapsed / 3600)} :{" "}
+          {parseNumber((elapsed % 3600) / 60)} : {parseNumber(elapsed % 60)}{" "}
+        </h2>
       </div>
     );
   }
+}
+
+function parseNumber(n) {
+  n = parseInt(n);
+  return n < 10 ? `0${n}` : n;
 }

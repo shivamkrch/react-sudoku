@@ -1,65 +1,14 @@
 import React, { Component } from "react";
 import "./App.css";
-import generator from "sudoku";
+import { generateSudoku, checkSolution, shareURL } from "./lib/sudoku";
 import produce from "immer";
 import SudokuBoard from "./components/SudokuBoard";
-
-/*
-  Generate a sudoku with the format
-
-  {rows: [{cols: [{row: 0, col: 0, value: 1, readonly: true}, ...]}, ...]}
-*/
-function genearteSudoku() {
-  const raw = generator.makepuzzle();
-  const rawSolution = generator.solvepuzzle(raw);
-
-  const formatted = raw.map(e => (e === null ? null : e + 1));
-  const formattedSolution = rawSolution.map(e => e + 1);
-
-  const result = {
-    rows: [],
-    solution: formattedSolution,
-    startTime: new Date(),
-    solvedTime: null
-  };
-
-  for (let i = 0; i < 9; i++) {
-    const row = { cols: [], index: i };
-    for (let j = 0; j < 9; j++) {
-      const value = formatted[9 * i + j];
-      const col = {
-        row: i,
-        col: j,
-        value,
-        readonly: value !== null
-      };
-      row.cols.push(col);
-    }
-    result.rows.push(row);
-  }
-
-  return result;
-}
-
-function checkSolution(sudoku) {
-  const candidate = sudoku.rows
-    .map(row => row.cols.map(col => col.value))
-    .flat();
-
-  for (let i = 0; i < candidate.length; i++) {
-    if (candidate[i] === null || candidate[i] !== sudoku.solution[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = produce({}, () => ({
-      sudoku: genearteSudoku()
+      sudoku: generateSudoku()
     }));
   }
 
@@ -71,6 +20,7 @@ class App extends Component {
           const solved = checkSolution(state.sudoku);
           if (solved) {
             state.sudoku.solvedTime = new Date();
+            state.sudoku.shareURL = shareURL(state.sudoku);
           }
         }
       })
@@ -99,7 +49,7 @@ class App extends Component {
         </header>
         <SudokuBoard sudoku={this.state.sudoku} onChange={this.handleChange} />
 
-        <button style={{ margin: "1rem" }} onClick={this.solveSudoku}>
+        <button className="btn btn-yellow" onClick={this.solveSudoku}>
           Solve it magically!
         </button>
       </div>
