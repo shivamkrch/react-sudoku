@@ -10,6 +10,7 @@ export default class Result extends Component {
   };
   render() {
     const { sudoku } = this.props;
+    console.log(sudoku);
     const elapsed = Math.floor(
       (sudoku.solvedTime.getTime() - sudoku.startTime.getTime()) / 1000
     );

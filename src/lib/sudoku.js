@@ -14,13 +14,13 @@ export function generateSudoku() {
   const formattedSolution = rawSolution.map(e => e + 1);
 
   const result = {
+    raw,
     rows: [],
     solution: formattedSolution,
     startTime: new Date(),
     solvedTime: null,
-    raw,
-    challengerStartTime: fromURL && fromURL.startTime,
-    challengerSolvedTime: fromURL && fromURL.solvedTime
+    challengerStartTime: fromURL && new Date(fromURL.startTime),
+    challengerSolvedTime: fromURL && new Date(fromURL.solvedTime)
   };
 
   for (let i = 0; i < 9; i++) {
