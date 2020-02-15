@@ -48,3 +48,7 @@
 .field[readonly] {
   color: #222;
 }
+
+.solved {
+  color: rgb(11, 155, 11);
+}
