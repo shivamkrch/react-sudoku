@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import "./App.css";
-import { generateSudoku, checkSolution, shareURL } from "./lib/sudoku";
+import {
+  generateSudoku,
+  checkSolution,
+  shareURL,
+  checkAnswer
+} from "./lib/sudoku";
 import produce from "immer";
 import SudokuBoard from "./components/SudokuBoard";
 
@@ -18,10 +23,19 @@ class App extends Component {
         state.sudoku.rows[e.row].cols[e.col].value = e.value;
         if (!state.sudoku.solvedTime) {
           const solved = checkSolution(state.sudoku);
+
           if (solved) {
             state.sudoku.solvedTime = new Date();
             state.sudoku.shareURL = shareURL(state.sudoku);
           }
+          const isCorrect = checkAnswer(
+            state.sudoku.rows[e.row].cols[e.col].value,
+            state.sudoku.rows[e.row].cols[e.col].rawindex,
+            state.sudoku
+          );
+          if (isCorrect) {
+            state.sudoku.rows[e.row].cols[e.col].answered = "yes";
+          } else state.sudoku.rows[e.row].cols[e.col].answered = null;
         }
       })
     );

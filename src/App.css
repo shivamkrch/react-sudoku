@@ -45,6 +45,9 @@
   color: #888;
   border: 1px solid #afacac;
 }
+.field[answered] {
+  color: green;
+}
 
 .field[readonly] {
   color: #222;
